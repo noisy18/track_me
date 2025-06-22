@@ -1,9 +1,8 @@
-from typing import Annotated
 from contextlib import asynccontextmanager
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 
-from models.task import STaskAdd
 from database import create_tabels, delete_tables
+from router import router as tasks_router
 
 # Фукция для логгирования (удобно во время тестов, что база очищается при каждом тесте)
 @asynccontextmanager
@@ -16,22 +15,4 @@ async def lifespan(app: FastAPI):
     print("Выключение")
 
 app = FastAPI(lifespan=lifespan)
-
-tasks = []
-
-@app.post("/tasks")
-async def add_task(
-    task: Annotated[STaskAdd, Depends()],
-):
-    tasks.append(task)
-    return {"ok": True}
-
-
-
-
-
-
-# @app.get("/tasks")
-# def get_tasks():
-#     task = Task(name="Соси")
-#     return {"data": task}
+app.include_router(tasks_router)

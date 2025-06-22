@@ -8,3 +8,7 @@ class STaskAdd(BaseModel):
 
 class STask(STaskAdd):
     id: int
+
+class STaskId(BaseModel):
+    status: bool = True
+    taks_id: int
